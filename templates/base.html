@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        {% block title %}
+            Django App
+        {% endblock %}
+    </title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <script src="https://unpkg.com/htmx.org@1.9.3"></script>
+
+    <script src="{% static 'js/main.js' %}" defer></script>
+</head>
+<body>
+    
+    <nav>
+
+        <a href="{% url 'post_list' %}">
+            <span role="img" aria-label="Posts" title="Posts">Posts</span>
+        </a> | 
+        <a href="{% url 'my_post' %}">
+            <span role="img" aria-label="Posts" title="Posts">Your Posts</span>
+        </a> | 
+        {% if user.is_authenticated %}
+
+            <form class="logout" action="{% url 'logout' %}" method="post">
+                {% csrf_token %} 
+                <button class="logout-button" aria-label="User Logout" title="User Logout">Logout</button>
+            </form>
+            <a href="{% url 'profile' %}" class="nav-link px-2">Profile</a>
+            <a href="{% url 'list_user' %}">Friends</a>
+
+        {% else %}
+            <a href="{% url 'register' %}">
+                <span role="img" aria-label="User Registration" title="User Registration">Register</span>
+            </a> | 
+            <a href="{% url 'login' %}">
+                <span role="img" aria-label="User Login" title="User Login">Login</span>
+            </a>
+        {% endif %}
+
+    </nav>
+    {% if request.user.is_authenticated%}
+    Hi, {{user.username}}
+    
+    {% endif %}
+    
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+</body>
+</html>

@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>{{ user.username }}'s Profile</h1>
+
+    <p><strong>Username:</strong> {{ user.username }}</p>
+    <p><strong>Email:</strong> {{ user.email }}</p>
+    <p><strong>First Name:</strong> {{ user.first_name }}</p>
+    <p><strong>Last Name:</strong> {{ user.last_name }}</p>
+    <p><strong>Bio:</strong> {{ user.profile.bio }}</p>
+
+    {% if profile_form.instance.avatar %}
+        <img src="{{ profile_form.instance.avatar.url }}" alt="Avatar" style="max-width: 150px; max-height: 150px;">
+    {% else %}
+        <p>No avatar uploaded.</p>
+    {% endif %}
+    
+    <hr>
+
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <h2>User Information</h2>
+        {{ user_form.as_p }}
+
+        <h2>Profile Information</h2>
+        {{ profile_form.as_p }}
+
+        <button type="submit">Update Profile</button>
+    </form>
+
+    {% if messages %}
+        <ul>
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <hr>
+    <h1>Liked Posts</h1>
+    {% if liked_posts %}
+        
+            {% for post in liked_posts %}
+           <a href="{% url 'post_detail' post.id %}"><p>{{ post.content }}</p></a>
+           <br>
+            {% endfor %}
+    {% else %}
+       <p>No liked posts.</p>
+    {% endif %}
+{% endblock %}
