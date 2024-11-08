@@ -30,7 +30,8 @@ def register_view(request):
         form = RegisterForm(request.POST)
         if form.is_valid():
             user = form.save()
-            Profile.objects.create(user=user)  
+            Profile.objects.get_or_create(user=user)
+  
 
             login(request, user)
             return redirect('post_list')
