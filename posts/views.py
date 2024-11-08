@@ -47,7 +47,7 @@ def update_post(request, post_id):
         messages.error(request, 'You do not have permission to edit this post.')
         if request.headers.get('HX-Request') == 'true':
             response = JsonResponse({"message": "Can't update this post"})
-            response['HX-Refresh'] = "true"  # Triggers a page refresh on the client
+            response['HX-Refresh'] = "true"  
             return response
         return redirect('post_list')
     if request.method == 'POST':
@@ -58,7 +58,7 @@ def update_post(request, post_id):
             post.save()
             if request.headers.get('HX-Request') == 'true':
                 response = JsonResponse({"message": "Post Updated"})
-                response['HX-Refresh'] = "true"  # Triggers a page refresh on the client
+                response['HX-Refresh'] = "true"  
                 return response
             return redirect('post_list')
 
@@ -82,7 +82,7 @@ def search_post(request):
 
 @login_required(login_url="user/login/")
 def post_like(request, id):
-    post = get_object_or_404(Post, id=id)  # Fetch the post or return a 404 if not found
+    post = get_object_or_404(Post, id=id)  
     if request.user not in post.like.all():
         post.like.add(request.user)  
         
@@ -90,18 +90,18 @@ def post_like(request, id):
         post.like.remove(request.user)
     if request.headers.get('HX-Request') == 'true':
         response = JsonResponse({"message": "Post Liked"})
-        response['HX-Refresh'] = "true"  # Triggers a page refresh on the client
+        response['HX-Refresh'] = "true"  
         return response
     response = JsonResponse({"message": "Post Liked"})
 
     
 def delete_comment(request, id):
     comment = get_object_or_404(Comment, id=id)
-    post_id = comment.post.id  # Assuming the Comment model has a ForeignKey to Pos
+    post_id = comment.post.id  
     comment.delete()
     if request.headers.get('HX-Request') == 'true':
         response = JsonResponse({"message": "Post Liked"})
-        response['HX-Refresh'] = "true"  # Triggers a page refresh on the client
+        response['HX-Refresh'] = "true"  
         return response
     return redirect('post_detail', post_id=post_id)
 
@@ -109,7 +109,7 @@ def delete_comment(request, id):
 @login_required(login_url="user/login/")
 def create_post(request):
     if request.method == 'POST':
-        form = PostForm(request.POST, request.FILES)  # Include request.FILES
+        form = PostForm(request.POST, request.FILES) 
         if form.is_valid():
             post = form.save(commit=False)
             post.author = request.user 
@@ -119,6 +119,6 @@ def create_post(request):
         else:
             messages.error(request, "Error creating post. Please correct the errors below.")
     else:
-        form = PostForm()  # For GET requests, show an empty form
+        form = PostForm()  
 
     return render(request, 'create_post.html', {'form': form})

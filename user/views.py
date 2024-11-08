@@ -47,7 +47,7 @@ def logout_view(request):
 def profile_view(request):
     user_form = UserForm(instance=request.user)
     profile, created = Profile.objects.get_or_create(user=request.user)
-    liked_posts = Post.objects.filter(like=request.user)  # Assuming 'like' is a ManyToManyField on Post
+    liked_posts = Post.objects.filter(like=request.user)  
 
     if request.method == 'POST':
         p_form = UserProfileForm(request.POST, request.FILES, instance=profile)
